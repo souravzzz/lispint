@@ -9,7 +9,6 @@ public class Interpreter {
 			SExpression c = new SExpression("c");
 
 			// Evaluator.eval(a, b, c);
-			Helper.eq();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

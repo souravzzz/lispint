@@ -1,14 +1,16 @@
 package lispint;
 
+import static lispint.Helper.*;
+
 public class Evaluator {
 
 	public static SExpression eval(SExpression exp, SExpression a, SExpression d)
 			throws Exception {
 
 		if (isAtom(exp)) {
-			if (equals(exp, "T")) {
+			if (isEqual(exp, "T")) {
 				return SExpression.T;
-			} else if (equals(exp, "NIL")) {
+			} else if (isEqual(exp, "NIL")) {
 				return SExpression.NIL;
 			} else if (isInt(exp)) {
 				return exp;
@@ -18,11 +20,11 @@ public class Evaluator {
 				throw new Exception("Undefined Variable");
 			}
 		} else {
-			if (equals(car(exp), "QUOTE")) {
+			if (isEqual(car(exp), "QUOTE")) {
 				return cadr(exp);
-			} else if (equals(car(exp), "COND")) {
+			} else if (isEqual(car(exp), "COND")) {
 				return evcon(cdr(exp), a, d);
-			} else if (equals(car(exp), "DEFUN")) {
+			} else if (isEqual(car(exp), "DEFUN")) {
 				return null; // TODO add stuff to d list
 			} else {
 				return apply(car(exp), evlist(cdr(exp), a, d), a, d);
@@ -58,46 +60,46 @@ public class Evaluator {
 
 		if (isAtom(f)) {
 
-			if (equals(f, "CAR")) {
+			if (isEqual(f, "CAR")) {
 				return Builtins.CAR(x);
 
-			} else if (equals(f, "CDR")) {
+			} else if (isEqual(f, "CDR")) {
 				return Builtins.CDR(x);
 
-			} else if (equals(f, "CONS")) {
+			} else if (isEqual(f, "CONS")) {
 				return Builtins.CONS(x);
 
-			} else if (equals(f, "ATOM")) {
+			} else if (isEqual(f, "ATOM")) {
 				return Builtins.ATOM(x);
 
-			} else if (equals(f, "EQ")) {
+			} else if (isEqual(f, "EQ")) {
 				return Builtins.EQ(x);
 
-			} else if (equals(f, "NULL")) {
+			} else if (isEqual(f, "NULL")) {
 				return Builtins.NULL(x);
 
-			} else if (equals(f, "INT")) {
+			} else if (isEqual(f, "INT")) {
 				return Builtins.INT(x);
 
-			} else if (equals(f, "LESS")) {
+			} else if (isEqual(f, "LESS")) {
 				return Builtins.LESS(x);
 
-			} else if (equals(f, "GREATER")) {
+			} else if (isEqual(f, "GREATER")) {
 				return Builtins.GREATER(x);
 
-			} else if (equals(f, "PLUS")) {
+			} else if (isEqual(f, "PLUS")) {
 				return Builtins.PLUS(x);
 
-			} else if (equals(f, "MINUS")) {
+			} else if (isEqual(f, "MINUS")) {
 				return Builtins.MINUS(x);
 
-			} else if (equals(f, "TIMES")) {
+			} else if (isEqual(f, "TIMES")) {
 				return Builtins.TIMES(x);
 
-			} else if (equals(f, "QUOTIENT")) {
+			} else if (isEqual(f, "QUOTIENT")) {
 				return Builtins.QUOTIENT(x);
 
-			} else if (equals(f, "REMAINDER")) {
+			} else if (isEqual(f, "REMAINDER")) {
 				return Builtins.REMAINDER(x);
 
 			} else {
@@ -120,36 +122,6 @@ public class Evaluator {
 		return a;
 	}
 
-	public static boolean isNull(SExpression exp) {
-		return (exp.get_car() == null && exp.get_cdr() == null && exp.get_val()
-				.equals("NIL"));
-	}
-
-	public static boolean isAtom(SExpression exp) {
-		return (exp.get_car() == null && exp.get_cdr() == null && exp.get_val() != null);
-	}
-
-	public static boolean isInt(SExpression exp) {
-		if (!isAtom(exp)) {
-			return false;
-		}
-
-		try {
-			Integer.parseInt(exp.get_val());
-			return true;
-		} catch (NumberFormatException ne) {
-			return false;
-		}
-	}
-
-	public static boolean equals(SExpression exp, String str) {
-		if (isAtom(exp)) {
-			return exp.get_val().equalsIgnoreCase(str);
-		}
-
-		return false;
-	}
-
 	public static boolean isBound(SExpression exp, SExpression a)
 			throws Exception {
 		if (!isAtom(exp)) {
@@ -160,7 +132,7 @@ public class Evaluator {
 			return false;
 		}
 
-		if (equals(caar(a), exp.get_val())) {
+		if (isEqual(caar(a), exp.get_val())) {
 			return true;
 		} else {
 			return isBound(cdr(exp), a);
@@ -173,42 +145,11 @@ public class Evaluator {
 			throw new Exception("isBound called with non-atom");
 		}
 
-		if (equals(caar(a), exp.get_val())) {
+		if (isEqual(caar(a), exp.get_val())) {
 			return cadr(a);
 		} else {
 			return getVal(exp, cdr(a));
 		}
 	}
 
-	public static SExpression car(SExpression exp) {
-		return exp.get_car();
-	}
-
-	public static SExpression cdr(SExpression exp) {
-		return exp.get_cdr();
-	}
-
-	public static SExpression caar(SExpression exp) {
-		return car(car(exp));
-	}
-
-	public static SExpression cadr(SExpression exp) {
-		return car(cdr(exp));
-	}
-
-	public static SExpression cdar(SExpression exp) {
-		return cdr(car(exp));
-	}
-
-	public static SExpression cddr(SExpression exp) {
-		return cdr(cdr(exp));
-	}
-
-	public static SExpression cadar(SExpression exp) {
-		return car(cdr(car(exp)));
-	}
-
-	public static SExpression cons(SExpression exp1, SExpression exp2) {
-		return new SExpression(exp1, exp2);
-	}
 }

@@ -1,5 +1,7 @@
 package lispint;
 
+import static lispint.Helper.*;
+
 public class Builtins {
 
 	public static SExpression CAR(SExpression exp) {
