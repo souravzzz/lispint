@@ -6,7 +6,6 @@ public class SExpression {
 	SExpression _cdr;
 
 	String _val;
-	boolean _atom;
 
 	public static final SExpression T = new SExpression("T");
 	public static final SExpression NIL = new SExpression("NIL");
@@ -15,14 +14,12 @@ public class SExpression {
 		_car = exp1;
 		_cdr = exp2;
 		_val = null;
-		_atom = false;
 	}
 
 	public SExpression(String str) {
 		_car = null;
 		_cdr = null;
 		_val = str.toUpperCase();
-		_atom = true;
 	}
 
 	public static SExpression get(boolean b) {
@@ -39,10 +36,6 @@ public class SExpression {
 
 	public String get_val() {
 		return _val;
-	}
-
-	public boolean is_atom() {
-		return _atom;
 	}
 
 }

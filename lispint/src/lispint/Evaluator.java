@@ -126,22 +126,53 @@ public class Evaluator {
 	}
 
 	public static boolean isAtom(SExpression exp) {
-		return exp.is_atom();
+		return (exp.get_car() == null && exp.get_cdr() == null && exp.get_val() != null);
 	}
 
 	public static boolean isInt(SExpression exp) {
-		return true;
+		if (!isAtom(exp)) {
+			return false;
+		}
+
+		try {
+			Integer.parseInt(exp.get_val());
+			return true;
+		} catch (NumberFormatException ne) {
+			return false;
+		}
 	}
 
-	public static boolean equals(SExpression exp, String id) {
+	public static boolean equals(SExpression exp, String str) {
+		if (isAtom(exp)) {
+			return exp.get_val().equalsIgnoreCase(str);
+		}
+
 		return false;
 	}
 
-	public static boolean isBound(SExpression exp, SExpression a) {
-		return true;
+	public static boolean isBound(SExpression exp, SExpression a)
+			throws Exception {
+		if (!isAtom(exp)) {
+			throw new Exception("isBound called with non-atom");
+		}
+
+		if (isNull(a)) {
+			return false;
+		}
+
+		if (equals(caar(a), exp.get_val())) {
+			return true;
+		} else {
+			return isBound(cdr(exp), a);
+		}
 	}
 
-	public static SExpression getVal(SExpression exp, SExpression a) {
+	public static SExpression getVal(SExpression exp, SExpression a)
+			throws Exception {
+		if (!isAtom(exp)) {
+			throw new Exception("isBound called with non-atom");
+		}
+
 		if (equals(caar(a), exp.get_val())) {
 			return cadr(a);
 		} else {
