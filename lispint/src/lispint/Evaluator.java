@@ -1,15 +1,9 @@
 package lispint;
 
-import java.util.List;
-
 public class Evaluator {
 
-	private Evaluator() {
-
-	}
-
-	public static SExpression eval(SExpression exp, List<SExpression> a,
-			List<SExpression> d) throws Exception {
+	public static SExpression eval(SExpression exp, SExpression a, SExpression d)
+			throws Exception {
 
 		if (isAtom(exp)) {
 			if (equals(exp, "T")) {
@@ -36,8 +30,8 @@ public class Evaluator {
 		}
 	}
 
-	public static SExpression evcon(SExpression x, List<SExpression> a,
-			List<SExpression> d) throws Exception {
+	public static SExpression evcon(SExpression x, SExpression a, SExpression d)
+			throws Exception {
 
 		if (isNull(x)) {
 			throw new Exception("x is empty");
@@ -49,18 +43,18 @@ public class Evaluator {
 		}
 	}
 
-	public static SExpression evlist(SExpression x, List<SExpression> a,
-			List<SExpression> d) throws Exception {
+	public static SExpression evlist(SExpression x, SExpression a, SExpression d)
+			throws Exception {
 
 		if (isNull(x)) {
-			return null; // TODO return NIL
+			return SExpression.NIL;
 		} else {
 			return cons(eval(car(x), a, d), evlist(cdr(x), a, d));
 		}
 	}
 
 	public static SExpression apply(SExpression f, SExpression x,
-			List<SExpression> a, List<SExpression> d) throws Exception {
+			SExpression a, SExpression d) throws Exception {
 
 		if (isAtom(f)) {
 
@@ -115,22 +109,24 @@ public class Evaluator {
 		}
 	}
 
-	public static List<SExpression> addPairs(SExpression params,
-			SExpression args, List<SExpression> a) {
+	public static SExpression addPairs(SExpression params, SExpression args,
+			SExpression a) {
 
 		if (!isNull(params)) {
-			a.add(0, new SExpression(car(params), car(args)));
-			addPairs(cdr(params), cdr(args), a);
+			SExpression car = new SExpression(car(params), car(args));
+			SExpression cdr = addPairs(cdr(params), cdr(args), a);
+			return new SExpression(car, cdr);
 		}
 		return a;
 	}
 
 	public static boolean isNull(SExpression exp) {
-		return false;
+		return (exp.get_car() == null && exp.get_cdr() == null && exp.get_val()
+				.equals("NIL"));
 	}
 
 	public static boolean isAtom(SExpression exp) {
-		return true;
+		return exp.is_atom();
 	}
 
 	public static boolean isInt(SExpression exp) {
@@ -141,12 +137,16 @@ public class Evaluator {
 		return false;
 	}
 
-	public static boolean isBound(SExpression exp, List<SExpression> a) {
+	public static boolean isBound(SExpression exp, SExpression a) {
 		return true;
 	}
 
-	public static SExpression getVal(SExpression exp, List<SExpression> a) {
-		return null;
+	public static SExpression getVal(SExpression exp, SExpression a) {
+		if (equals(caar(a), exp.get_val())) {
+			return cadr(a);
+		} else {
+			return getVal(exp, cdr(a));
+		}
 	}
 
 	public static SExpression car(SExpression exp) {
