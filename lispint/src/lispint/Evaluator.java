@@ -8,14 +8,14 @@ public class Evaluator {
 
 	}
 
-	public static SExpression eval(SExpression exp, SExpression a, SExpression d)
-			throws Exception {
+	public static SExpression eval(SExpression exp, List<SExpression> a,
+			List<SExpression> d) throws Exception {
 
 		if (isAtom(exp)) {
 			if (equals(exp, "T")) {
-
+				return SExpression.T;
 			} else if (equals(exp, "NIL")) {
-
+				return SExpression.NIL;
 			} else if (isInt(exp)) {
 				return exp;
 			} else if (isBound(exp, a)) {
@@ -27,19 +27,17 @@ public class Evaluator {
 			if (equals(car(exp), "QUOTE")) {
 				return cadr(exp);
 			} else if (equals(car(exp), "COND")) {
-				return null;
+				return evcon(cdr(exp), a, d);
 			} else if (equals(car(exp), "DEFUN")) {
 				return null; // TODO add stuff to d list
 			} else {
 				return apply(car(exp), evlist(cdr(exp), a, d), a, d);
 			}
 		}
-
-		throw new Exception("Illegal State Reached");
 	}
 
-	public static SExpression evcon(SExpression x, SExpression a, SExpression d)
-			throws Exception {
+	public static SExpression evcon(SExpression x, List<SExpression> a,
+			List<SExpression> d) throws Exception {
 
 		if (isNull(x)) {
 			throw new Exception("x is empty");
@@ -51,8 +49,8 @@ public class Evaluator {
 		}
 	}
 
-	public static SExpression evlist(SExpression x, SExpression a, SExpression d)
-			throws Exception {
+	public static SExpression evlist(SExpression x, List<SExpression> a,
+			List<SExpression> d) throws Exception {
 
 		if (isNull(x)) {
 			return null; // TODO return NIL
@@ -62,7 +60,7 @@ public class Evaluator {
 	}
 
 	public static SExpression apply(SExpression f, SExpression x,
-			SExpression a, SExpression d) throws Exception {
+			List<SExpression> a, List<SExpression> d) throws Exception {
 
 		if (isAtom(f)) {
 
@@ -117,14 +115,14 @@ public class Evaluator {
 		}
 	}
 
-	public static SExpression addPairs(SExpression params, SExpression args,
-			SExpression a) {
+	public static List<SExpression> addPairs(SExpression params,
+			SExpression args, List<SExpression> a) {
 
-		if (isNull(params))
-			return a;
-		SExpression car = new SExpression(car(params), car(args));
-		SExpression cdr = addPairs(cdr(params), cdr(args), a);
-		return new SExpression(car, cdr);
+		if (!isNull(params)) {
+			a.add(0, new SExpression(car(params), car(args)));
+			addPairs(cdr(params), cdr(args), a);
+		}
+		return a;
 	}
 
 	public static boolean isNull(SExpression exp) {
@@ -143,11 +141,11 @@ public class Evaluator {
 		return false;
 	}
 
-	public static boolean isBound(SExpression exp, SExpression a) {
+	public static boolean isBound(SExpression exp, List<SExpression> a) {
 		return true;
 	}
 
-	public static SExpression getVal(SExpression exp, SExpression a) {
+	public static SExpression getVal(SExpression exp, List<SExpression> a) {
 		return null;
 	}
 
