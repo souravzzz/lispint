@@ -17,7 +17,7 @@ public class Evaluator {
 			} else if (isBound(exp, a)) {
 				return getVal(exp, a);
 			} else {
-				throw new Exception("Undefined Variable");
+				throw new Exception("Undefined Variable: " + exp.get_val());
 			}
 		} else {
 			if (isEqual(car(exp), "QUOTE")) {
