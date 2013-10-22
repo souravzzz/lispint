@@ -38,4 +38,7 @@ public class SExpression {
 		return _val;
 	}
 
+	public String toString() {
+		return Helper.toDot(this);
+	}
 }

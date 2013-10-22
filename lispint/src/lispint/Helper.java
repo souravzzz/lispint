@@ -60,6 +60,25 @@ public class Helper {
 		return false;
 	}
 
+	public static String toDot(SExpression exp) {
+		if (isAtom(exp)) {
+			return exp.get_val();
+		} else if (isNull(exp)) {
+			return null;
+		} else {
+			String str = "(";
+			if (car(exp) != null) {
+				str += toDot(car(exp));
+			}
+			str += " . ";
+			if (cdr(exp) != null) {
+				str += toDot(cdr(exp));
+			}
+			str += ")";
+			return str;
+		}
+	}
+
 	public static SExpression cons(SExpression exp1, SExpression exp2) {
 		return new SExpression(exp1, exp2);
 	}

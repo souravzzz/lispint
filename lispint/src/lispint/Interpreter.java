@@ -4,11 +4,13 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		try {
-			SExpression a = new SExpression("a");
-			SExpression b = new SExpression("b");
-			SExpression c = new SExpression("c");
+			SExpression a = new SExpression("1");
 
-			// Evaluator.eval(a, b, c);
+			SExpression program = a;
+			SExpression result = Evaluator.eval(program, SExpression.NIL,
+					SExpression.NIL);
+			System.out.println(result);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

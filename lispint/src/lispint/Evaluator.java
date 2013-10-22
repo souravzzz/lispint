@@ -25,7 +25,7 @@ public class Evaluator {
 			} else if (isEqual(car(exp), "COND")) {
 				return evcon(cdr(exp), a, d);
 			} else if (isEqual(car(exp), "DEFUN")) {
-				return null; // TODO add stuff to d list
+				return SExpression.NIL; // TODO add stuff to d list
 			} else {
 				return apply(car(exp), evlist(cdr(exp), a, d), a, d);
 			}
@@ -124,11 +124,12 @@ public class Evaluator {
 
 	public static boolean isBound(SExpression exp, SExpression a)
 			throws Exception {
+
 		if (!isAtom(exp)) {
 			throw new Exception("isBound called with non-atom");
 		}
 
-		if (isNull(a)) {
+		if (isNull(a) || isNull(car(a)) || isNull(caar(a))) {
 			return false;
 		}
 
@@ -141,6 +142,7 @@ public class Evaluator {
 
 	public static SExpression getVal(SExpression exp, SExpression a)
 			throws Exception {
+
 		if (!isAtom(exp)) {
 			throw new Exception("isBound called with non-atom");
 		}
