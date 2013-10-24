@@ -21,6 +21,9 @@ public class HelperTest {
 	final SExpression j = new SExpression("3");
 	final SExpression m = new SExpression(i, j);
 
+	final SExpression x = new SExpression("a");
+	final SExpression t = new SExpression("T");
+
 	@Test
 	public void testCar() {
 		assertTrue(car(p).equals(a));
@@ -95,13 +98,27 @@ public class HelperTest {
 	}
 
 	@Test
-	public void testIsEqual() {
+	public void testIsEqualStr() {
 		assertTrue(isEqual(a, "a"));
 		assertTrue(isEqual(a, "A"));
+		assertTrue(isEqual(i, "2"));
 
-		assertFalse(isEqual(a, "i"));
+		assertFalse(isEqual(a, "b"));
+		assertFalse(isEqual(i, "i"));
 		assertFalse(isEqual(p, "A"));
-		assertFalse(isEqual(q, "q"));
+		assertFalse(isEqual(q, "()()"));
+	}
+
+	@Test
+	public void testIsEqualExp() {
+		assertTrue(isEqual(a, a));
+		assertTrue(isEqual(a, a));
+		assertTrue(isEqual(a, x));
+		assertTrue(isEqual(t, SExpression.T));
+
+		assertFalse(isEqual(a, b));
+		assertFalse(isEqual(a, m));
+		assertFalse(isEqual(p, q));
 	}
 
 	@Test
@@ -113,5 +130,19 @@ public class HelperTest {
 		assertTrue(cdar(cons(cons(a, b), cons(i, j))).equals(b));
 		assertTrue(cadr(cons(cons(a, b), cons(i, j))).equals(i));
 		assertTrue(cddr(cons(cons(a, b), cons(i, j))).equals(j));
+	}
+
+	@Test
+	public void testToDot() {
+		assertEquals("A", a.toString());
+		assertEquals("B", b.toString());
+		assertEquals("2", i.toString());
+
+		assertEquals("(A . B)", p.toString());
+		assertEquals("((A . B) . (C . D))", r.toString());
+		assertEquals("(2 . 3)", m.toString());
+
+		assertEquals("T", SExpression.T.toString());
+		assertEquals("NIL", SExpression.NIL.toString());
 	}
 }

@@ -60,6 +60,14 @@ public class Helper {
 		return false;
 	}
 
+	public static boolean isEqual(SExpression e1, SExpression e2) {
+		if (isAtom(e1) && isAtom(e2)) {
+			return e1.get_val().equalsIgnoreCase(e2.get_val());
+		}
+
+		return false;
+	}
+
 	public static String toDot(SExpression exp) {
 		if (isAtom(exp)) {
 			return exp.get_val();
