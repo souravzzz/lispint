@@ -27,26 +27,23 @@ public class Lexer {
 	public boolean hasNext() {
 		try {
 			_tokenizer.nextToken();
+			if (_tokenizer.ttype != StreamTokenizer.TT_EOF) {
+				_tokenizer.pushBack();
+				return true;
+			}
 		} catch (IOException e) {
-			return false;
 		}
+		return false;
 
-		if (_tokenizer.ttype == StreamTokenizer.TT_EOF) {
-			return false;
-		}
-
-		_tokenizer.pushBack();
-		return true;
 	}
 
 	public Token next() {
 		try {
 			_tokenizer.nextToken();
+			return Token.get(_tokenizer.ttype, _tokenizer.sval);
 		} catch (IOException e) {
 			return null;
 		}
-
-		return Token.get(_tokenizer.ttype, _tokenizer.sval);
 	}
 
 }
