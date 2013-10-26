@@ -1,7 +1,7 @@
 package lispint;
 
-import static org.junit.Assert.*;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;

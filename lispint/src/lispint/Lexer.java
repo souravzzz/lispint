@@ -34,7 +34,6 @@ public class Lexer {
 		} catch (IOException e) {
 		}
 		return false;
-
 	}
 
 	public Token getNextToken() {
@@ -44,6 +43,10 @@ public class Lexer {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+
+	public void unreadLastToken() {
+		_tokenizer.pushBack();
 	}
 
 }

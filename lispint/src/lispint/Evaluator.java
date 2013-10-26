@@ -37,8 +37,7 @@ public class Evaluator {
 
 		if (isNull(x)) {
 			throw new Exception("x is empty");
-		} else if (eval(caar(x), a, d) != null) { // TODO check this condition,
-													// exception?
+		} else if (eval(caar(x), a, d) != SExpression.NIL) {
 			return eval(cadar(x), a, d);
 		} else {
 			return evcon(cdr(x), a, d);
