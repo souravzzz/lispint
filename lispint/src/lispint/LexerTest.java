@@ -81,8 +81,8 @@ public class LexerTest {
 	private static void testLexer(String input, List<String> expected) {
 		Lexer l = getLexer(input);
 		List<String> actual = new ArrayList<String>();
-		while (l.hasNext()) {
-			Token token = l.next();
+		while (l.hasMoreTokens()) {
+			Token token = l.getNextToken();
 			if (token != null) {
 				actual.add(token.toString());
 			}

@@ -24,7 +24,7 @@ public class Lexer {
 		_tokenizer.ordinaryChar(')');
 	}
 
-	public boolean hasNext() {
+	public boolean hasMoreTokens() {
 		try {
 			_tokenizer.nextToken();
 			if (_tokenizer.ttype != StreamTokenizer.TT_EOF) {
@@ -37,7 +37,7 @@ public class Lexer {
 
 	}
 
-	public Token next() {
+	public Token getNextToken() {
 		try {
 			_tokenizer.nextToken();
 			return Token.get(_tokenizer.ttype, _tokenizer.sval);
