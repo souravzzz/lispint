@@ -1,8 +1,7 @@
 package lispint;
 
-import static org.junit.Assert.*;
-
-import java.io.ByteArrayInputStream;
+import static lispint.CommonTest.getParser;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -20,7 +19,17 @@ public class ParserTest {
 
 	@Test
 	public void testParseAtom2() {
-		testParser("200");
+		testParser("222");
+	}
+
+	@Test
+	public void testParseAtom3() {
+		testParser("+333");
+	}
+
+	@Test
+	public void testParseAtom4() {
+		testParser("-4444");
 	}
 
 	@Test
@@ -44,6 +53,12 @@ public class ParserTest {
 	}
 
 	@Test
+	// TODO might need fix
+	public void testParseDot3() {
+		testParser("(4.5)");
+	}
+
+	@Test
 	public void testParseQuote() {
 		testParser("(QUOTE (10 20 30 40 50))");
 	}
@@ -63,15 +78,4 @@ public class ParserTest {
 		}
 	}
 
-	private static Parser getParser(String str) {
-		return new Parser(getLexer(str));
-	}
-
-	private static Lexer getLexer(String str) {
-		return new Lexer(getInputStream(str));
-	}
-
-	private static ByteArrayInputStream getInputStream(String str) {
-		return new ByteArrayInputStream(str.getBytes());
-	}
 }

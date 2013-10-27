@@ -19,6 +19,8 @@ public class Lexer {
 		_tokenizer.wordChars('a', 'z');
 		_tokenizer.wordChars('A', 'Z');
 		_tokenizer.wordChars('0', '9');
+		_tokenizer.wordChars('+', '+');
+		_tokenizer.wordChars('-', '-');
 		_tokenizer.ordinaryChar('.');
 		_tokenizer.ordinaryChar('(');
 		_tokenizer.ordinaryChar(')');

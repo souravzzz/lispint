@@ -1,9 +1,9 @@
 package lispint;
 
 import static java.util.Arrays.asList;
+import static lispint.CommonTest.getLexer;
 import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +49,8 @@ public class LexerTest {
 
 	@Test
 	public void testMixedList() {
-		String input = "(a 1 b 20)";
-		testLexer(input, asList("(", "A", "1", "B", "20", ")"));
+		String input = "(a -10 b 20 c +30)";
+		testLexer(input, asList("(", "A", "-10", "B", "20", "C", "+30", ")"));
 	}
 
 	@Test
@@ -64,9 +64,9 @@ public class LexerTest {
 
 	@Test
 	public void test2() {
-		String input = "(quote (100 200 300))";
+		String input = "(quote (100 +200 -300))";
 		testLexer(input,
-				asList("(", "QUOTE", "(", "100", "200", "300", ")", ")"));
+				asList("(", "QUOTE", "(", "100", "+200", "-300", ")", ")"));
 	}
 
 	@Test
@@ -93,14 +93,6 @@ public class LexerTest {
 		System.out.println("Expect: " + expected);
 		System.out.println();
 		assertEquals(expected.toString(), actual.toString());
-	}
-
-	private static Lexer getLexer(String str) {
-		return new Lexer(getInputStream(str));
-	}
-
-	private static ByteArrayInputStream getInputStream(String str) {
-		return new ByteArrayInputStream(str.getBytes());
 	}
 
 }
