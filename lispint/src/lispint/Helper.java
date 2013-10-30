@@ -30,6 +30,10 @@ public class Helper {
 		return car(cdr(car(exp)));
 	}
 
+	public static SExpression caddr(SExpression exp) {
+		return car(cdr(cdr(exp)));
+	}
+
 	public static boolean isNull(SExpression exp) {
 		return (exp.get_car() == null && exp.get_cdr() == null && exp.get_val()
 				.equals("NIL"));
@@ -53,7 +57,7 @@ public class Helper {
 	}
 
 	public static boolean isEqual(SExpression exp, String str) {
-		if (isAtom(exp)) {
+		if (exp != null && isAtom(exp)) {
 			return exp.get_val().equalsIgnoreCase(str);
 		}
 
@@ -85,6 +89,16 @@ public class Helper {
 			str += ")";
 			return str;
 		}
+	}
+
+	public static String toList(SExpression exp) {
+		if (isAtom(exp)) {
+			return exp.get_val();
+		} else {
+			// TODO implement toList properly
+		}
+
+		return null;
 	}
 
 	public static SExpression cons(SExpression exp1, SExpression exp2) {

@@ -25,7 +25,12 @@ public class Evaluator {
 			} else if (isEqual(car(exp), "COND")) {
 				return evcon(cdr(exp), a, d);
 			} else if (isEqual(car(exp), "DEFUN")) {
-				return SExpression.NIL; // TODO add stuff to d list
+				SExpression fName = cadr(exp);
+				SExpression fParams = caddr(exp);
+				SExpression fBody = cadr(cddr(exp));
+				SExpression fEntry = cons(fName, cons(fParams, fBody));
+				d = cons(fEntry, d); // FIXME problem
+				return fName;
 			} else {
 				return apply(car(exp), evlist(cdr(exp), a, d), a, d);
 			}
@@ -114,9 +119,9 @@ public class Evaluator {
 			SExpression a) {
 
 		if (!isNull(params)) {
-			SExpression car = new SExpression(car(params), car(args));
+			SExpression car = cons(car(params), car(args));
 			SExpression cdr = addPairs(cdr(params), cdr(args), a);
-			return new SExpression(car, cdr);
+			return cons(car, cdr);
 		}
 		return a;
 	}

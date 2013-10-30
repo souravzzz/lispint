@@ -105,6 +105,12 @@ public class EvalTest {
 		testEvalPass("(cons (cons 1 2) (cons 3 4))", "((1 . 2) . (3 . 4))");
 	}
 
+	@Test
+	public void testDefun() {
+		testEvalPass("(DEFUN DIFF (X Y) \n (COND ((EQ X Y) NIL) \n (T T)))",
+				"DIFF");
+	}
+
 	public static void testEvalPass(String input, String expectedOutput) {
 		try {
 			Parser p = getParser(input);
