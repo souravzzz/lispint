@@ -1,6 +1,7 @@
 package lispint;
 
 import static lispint.Helper.*;
+import static lispint.Validator.*;
 
 public class Evaluator {
 
@@ -17,7 +18,7 @@ public class Evaluator {
 			} else if (isBound(exp, env.a)) {
 				return getVal(exp, env.a);
 			} else {
-				throw new Exception("Undefined Variable: " + exp.get_val());
+				throw new Exception("Undefined Variable");
 			}
 		} else {
 			if (isEqual(car(exp), "QUOTE")) {
@@ -26,10 +27,11 @@ public class Evaluator {
 				return evcon(cdr(exp), env);
 			} else if (isEqual(car(exp), "DEFUN")) {
 				SExpression fName = cadr(exp);
+				validate("FNAME", fName);
 				SExpression fParams = caddr(exp);
 				SExpression fBody = cadr(cddr(exp));
 				SExpression fEntry = cons(fName, cons(fParams, fBody));
-				env.d = cons(fEntry, env.d); // FIXME problem
+				env.d = cons(fEntry, env.d);
 				return fName;
 			} else {
 				return apply(car(exp), evlist(cdr(exp), env), env);
@@ -40,9 +42,9 @@ public class Evaluator {
 	public static SExpression evcon(SExpression x, Environment env)
 			throws Exception {
 
-		if (isNull(x)) {
-			throw new Exception("x is empty");
-		} else if (eval(caar(x), env) != SExpression.NIL) {
+		validate("EVCON", x);
+
+		if (eval(caar(x), env) != SExpression.NIL) {
 			return eval(cadar(x), env);
 		} else {
 			return evcon(cdr(x), env);
@@ -62,58 +64,55 @@ public class Evaluator {
 	public static SExpression apply(SExpression f, SExpression x,
 			Environment env) throws Exception {
 
-		if (isAtom(f)) {
+		validate("FAPPLY", f);
 
-			if (isEqual(f, "CAR")) {
-				return Builtins.CAR(x);
+		if (isEqual(f, "CAR")) {
+			return Builtins.CAR(x);
 
-			} else if (isEqual(f, "CDR")) {
-				return Builtins.CDR(x);
+		} else if (isEqual(f, "CDR")) {
+			return Builtins.CDR(x);
 
-			} else if (isEqual(f, "CONS")) {
-				return Builtins.CONS(x);
+		} else if (isEqual(f, "CONS")) {
+			return Builtins.CONS(x);
 
-			} else if (isEqual(f, "ATOM")) {
-				return Builtins.ATOM(x);
+		} else if (isEqual(f, "ATOM")) {
+			return Builtins.ATOM(x);
 
-			} else if (isEqual(f, "EQ")) {
-				return Builtins.EQ(x);
+		} else if (isEqual(f, "EQ")) {
+			return Builtins.EQ(x);
 
-			} else if (isEqual(f, "NULL")) {
-				return Builtins.NULL(x);
+		} else if (isEqual(f, "NULL")) {
+			return Builtins.NULL(x);
 
-			} else if (isEqual(f, "INT")) {
-				return Builtins.INT(x);
+		} else if (isEqual(f, "INT")) {
+			return Builtins.INT(x);
 
-			} else if (isEqual(f, "LESS")) {
-				return Builtins.LESS(x);
+		} else if (isEqual(f, "LESS")) {
+			return Builtins.LESS(x);
 
-			} else if (isEqual(f, "GREATER")) {
-				return Builtins.GREATER(x);
+		} else if (isEqual(f, "GREATER")) {
+			return Builtins.GREATER(x);
 
-			} else if (isEqual(f, "PLUS")) {
-				return Builtins.PLUS(x);
+		} else if (isEqual(f, "PLUS")) {
+			return Builtins.PLUS(x);
 
-			} else if (isEqual(f, "MINUS")) {
-				return Builtins.MINUS(x);
+		} else if (isEqual(f, "MINUS")) {
+			return Builtins.MINUS(x);
 
-			} else if (isEqual(f, "TIMES")) {
-				return Builtins.TIMES(x);
+		} else if (isEqual(f, "TIMES")) {
+			return Builtins.TIMES(x);
 
-			} else if (isEqual(f, "QUOTIENT")) {
-				return Builtins.QUOTIENT(x);
+		} else if (isEqual(f, "QUOTIENT")) {
+			return Builtins.QUOTIENT(x);
 
-			} else if (isEqual(f, "REMAINDER")) {
-				return Builtins.REMAINDER(x);
+		} else if (isEqual(f, "REMAINDER")) {
+			return Builtins.REMAINDER(x);
 
-			} else {
-				Environment e = new Environment();
-				e.a = addPairs(car(getVal(f, env.d)), x, env.a);
-				e.d = env.d;
-				return eval(cdr(getVal(f, env.d)), e);
-			}
 		} else {
-			throw new Exception("Function name is not an atom");
+			Environment e = new Environment();
+			e.a = addPairs(car(getVal(f, env.d)), x, env.a);
+			e.d = env.d;
+			return eval(cdr(getVal(f, env.d)), e);
 		}
 	}
 
@@ -131,9 +130,7 @@ public class Evaluator {
 	public static boolean isBound(SExpression exp, SExpression a)
 			throws Exception {
 
-		if (!isAtom(exp)) {
-			throw new Exception("isBound called with non-atom");
-		}
+		validate("ISBOUND", exp);
 
 		if (isNull(a) || isNull(car(a)) || isNull(caar(a))) {
 			return false;
@@ -149,9 +146,7 @@ public class Evaluator {
 	public static SExpression getVal(SExpression exp, SExpression a)
 			throws Exception {
 
-		if (!isAtom(exp)) {
-			throw new Exception("isBound called with non-atom");
-		}
+		validate("GETVAL", exp);
 
 		if (isEqual(caar(a), exp.get_val())) {
 			return cdar(a);

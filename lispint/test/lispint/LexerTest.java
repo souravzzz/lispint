@@ -87,11 +87,6 @@ public class LexerTest {
 				actual.add(token.toString());
 			}
 		}
-		System.out.println();
-		System.out.println("Input:  " + input);
-		System.out.println("Actual: " + actual);
-		System.out.println("Expect: " + expected);
-		System.out.println();
 		assertEquals(expected.toString(), actual.toString());
 	}
 

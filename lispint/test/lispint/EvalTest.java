@@ -133,6 +133,14 @@ public class EvalTest {
 		testMultipleEval(inputs, outputs);
 	}
 
+	@Test
+	public void testDynamicScoping() {
+		String[] inputs = { "(defun f (x) (plus x y))", "(defun g (y) (f 10))",
+				"(defun h (y) (f 20))", "(g 5)", "(h 5)", "(g (h 5))" };
+		String[] outputs = { "F", "G", "H", "15", "25", "35" };
+		testMultipleEval(inputs, outputs);
+	}
+
 	public static void testEval(String input, String expectedOutput) {
 		try {
 			Parser p = getParser(input);

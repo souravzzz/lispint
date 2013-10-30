@@ -68,6 +68,7 @@ public class ParserTest {
 		testParser("(defun double (x)\n (TIMES 2 x))");
 	}
 
+	// TODO add asserts when toList() is done
 	private static void testParser(String input) {
 		try {
 			SExpression exp = getParser(input).parse();
