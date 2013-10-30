@@ -1,6 +1,5 @@
 LISP INTERPRETER
 ================
-----------------
 
 This is an interpreter for a subset of common lisp defined in a programming language course.
 
