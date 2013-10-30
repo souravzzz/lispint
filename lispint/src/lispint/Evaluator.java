@@ -4,7 +4,7 @@ import static lispint.Helper.*;
 
 public class Evaluator {
 
-	public static SExpression eval(SExpression exp, SExpression a, SExpression d)
+	public static SExpression eval(SExpression exp, Environment env)
 			throws Exception {
 
 		if (isAtom(exp)) {
@@ -14,8 +14,8 @@ public class Evaluator {
 				return SExpression.NIL;
 			} else if (isInt(exp)) {
 				return exp;
-			} else if (isBound(exp, a)) {
-				return getVal(exp, a);
+			} else if (isBound(exp, env.a)) {
+				return getVal(exp, env.a);
 			} else {
 				throw new Exception("Undefined Variable: " + exp.get_val());
 			}
@@ -23,44 +23,44 @@ public class Evaluator {
 			if (isEqual(car(exp), "QUOTE")) {
 				return cadr(exp);
 			} else if (isEqual(car(exp), "COND")) {
-				return evcon(cdr(exp), a, d);
+				return evcon(cdr(exp), env);
 			} else if (isEqual(car(exp), "DEFUN")) {
 				SExpression fName = cadr(exp);
 				SExpression fParams = caddr(exp);
 				SExpression fBody = cadr(cddr(exp));
 				SExpression fEntry = cons(fName, cons(fParams, fBody));
-				d = cons(fEntry, d); // FIXME problem
+				env.d = cons(fEntry, env.d); // FIXME problem
 				return fName;
 			} else {
-				return apply(car(exp), evlist(cdr(exp), a, d), a, d);
+				return apply(car(exp), evlist(cdr(exp), env), env);
 			}
 		}
 	}
 
-	public static SExpression evcon(SExpression x, SExpression a, SExpression d)
+	public static SExpression evcon(SExpression x, Environment env)
 			throws Exception {
 
 		if (isNull(x)) {
 			throw new Exception("x is empty");
-		} else if (eval(caar(x), a, d) != SExpression.NIL) {
-			return eval(cadar(x), a, d);
+		} else if (eval(caar(x), env) != SExpression.NIL) {
+			return eval(cadar(x), env);
 		} else {
-			return evcon(cdr(x), a, d);
+			return evcon(cdr(x), env);
 		}
 	}
 
-	public static SExpression evlist(SExpression x, SExpression a, SExpression d)
+	public static SExpression evlist(SExpression x, Environment env)
 			throws Exception {
 
 		if (isNull(x)) {
 			return SExpression.NIL;
 		} else {
-			return cons(eval(car(x), a, d), evlist(cdr(x), a, d));
+			return cons(eval(car(x), env), evlist(cdr(x), env));
 		}
 	}
 
 	public static SExpression apply(SExpression f, SExpression x,
-			SExpression a, SExpression d) throws Exception {
+			Environment env) throws Exception {
 
 		if (isAtom(f)) {
 
@@ -107,8 +107,10 @@ public class Evaluator {
 				return Builtins.REMAINDER(x);
 
 			} else {
-				return eval(cdr(getVal(f, d)),
-						addPairs(car(getVal(f, d)), x, a), d);
+				Environment e = new Environment();
+				e.a = addPairs(car(getVal(f, env.d)), x, env.a);
+				e.d = env.d;
+				return eval(cdr(getVal(f, env.d)), e);
 			}
 		} else {
 			throw new Exception("Function name is not an atom");
@@ -140,7 +142,7 @@ public class Evaluator {
 		if (isEqual(caar(a), exp.get_val())) {
 			return true;
 		} else {
-			return isBound(cdr(exp), a);
+			return isBound(exp, cdr(a));
 		}
 	}
 
@@ -152,7 +154,7 @@ public class Evaluator {
 		}
 
 		if (isEqual(caar(a), exp.get_val())) {
-			return cadr(a);
+			return cdar(a);
 		} else {
 			return getVal(exp, cdr(a));
 		}

@@ -9,117 +9,155 @@ public class EvalTest {
 
 	@Test
 	public void testSimple() {
-		testEvalPass("1", "1");
-		testEvalPass("-20", "-20");
-		testEvalPass("t", "T");
-		testEvalPass("()", "NIL");
+		testEval("1", "1");
+		testEval("-20", "-20");
+		testEval("t", "T");
+		testEval("()", "NIL");
 	}
 
 	@Test
 	public void testQuote() {
-		testEvalPass("(quote (1 2))", "(1 . (2 . NIL))");
-		testEvalPass("(quote (1 . 2))", "(1 . 2)");
-		testEvalPass("(quote (T NIL))", "(T . (NIL . NIL))");
+		testEval("(quote (1 2))", "(1 . (2 . NIL))");
+		testEval("(quote (1 . 2))", "(1 . 2)");
+		testEval("(quote (T NIL))", "(T . (NIL . NIL))");
 	}
 
 	@Test
 	public void testArithmetic() {
-		testEvalPass("(plus 1 2)", "3");
-		testEvalPass("(minus -10 +20)", "-30");
-		testEvalPass("(times +5 10)", "50");
-		testEvalPass("(times +5 10)", "50");
-		testEvalPass("(times -111 +9)", "-999");
-		testEvalPass("(quotient 10 2)", "5");
-		testEvalPass("(quotient -11 +9)", "-1");
+		testEval("(plus 1 2)", "3");
+		testEval("(minus -10 +20)", "-30");
+		testEval("(times +5 10)", "50");
+		testEval("(times +5 10)", "50");
+		testEval("(times -111 +9)", "-999");
+		testEval("(quotient 10 2)", "5");
+		testEval("(quotient -11 +9)", "-1");
 	}
 
 	@Test
 	public void testWhiteSpace() {
-		testEvalPass("\t\t\t   123     ", "123");
-		testEvalPass("   (  qUoTieNt   -50   5  )  ", "-10");
-		testEvalPass("(  times\n\n \r 3 \n\t  \t5 \n)", "15");
+		testEval("\t\t\t   123     ", "123");
+		testEval("   (  qUoTieNt   -50   5  )  ", "-10");
+		testEval("(  times\n\n \r 3 \n\t  \t5 \n)", "15");
 	}
 
 	@Test
 	public void testRemainder() {
-		testEvalPass("(REMAINDER 5 3)", "2");
-		testEvalPass("(REMAINDER -5 3)", "-2");
-		testEvalPass("(REMAINDER 5 -3)", "2");
-		testEvalPass("(REMAINDER -5 -3)", "-2");
+		testEval("(REMAINDER 5 3)", "2");
+		testEval("(REMAINDER -5 3)", "-2");
+		testEval("(REMAINDER 5 -3)", "2");
+		testEval("(REMAINDER -5 -3)", "-2");
 	}
 
 	@Test
 	public void testEQ() {
-		testEvalPass("(EQ 1 1)", "T");
-		testEvalPass("(EQ 1 2)", "NIL");
+		testEval("(EQ 1 1)", "T");
+		testEval("(EQ 1 2)", "NIL");
 	}
 
 	@Test
 	public void testLess() {
-		testEvalPass("(LESS 1 2)", "T");
-		testEvalPass("(LESS 2 -2)", "NIL");
+		testEval("(LESS 1 2)", "T");
+		testEval("(LESS 2 -2)", "NIL");
 	}
 
 	@Test
 	public void testGreater() {
-		testEvalPass("(GREATER -5 2)", "NIL");
-		testEvalPass("(GREATER -2 -5)", "T");
+		testEval("(GREATER -5 2)", "NIL");
+		testEval("(GREATER -2 -5)", "T");
 	}
 
 	@Test
 	public void testInt() {
-		testEvalPass("(INT 0)", "T");
-		testEvalPass("(INT 999)", "T");
-		testEvalPass("(INT -333)", "T");
+		testEval("(INT 0)", "T");
+		testEval("(INT 999)", "T");
+		testEval("(INT -333)", "T");
 	}
 
 	@Test
 	public void testAtom() {
-		testEvalPass("(ATOM 0)", "T");
-		testEvalPass("(ATOM -100)", "T");
-		testEvalPass("(ATOM (quote (2 3)))", "NIL");
+		testEval("(ATOM 0)", "T");
+		testEval("(ATOM -100)", "T");
+		testEval("(ATOM (quote (2 3)))", "NIL");
 	}
 
 	@Test
 	public void testNull() {
-		testEvalPass("(null ())", "T");
-		testEvalPass("(null NIL)", "T");
-		testEvalPass("(null (quote (1 2 3)))", "NIL");
-		testEvalPass("(null (times 3 4))", "NIL");
+		testEval("(null ())", "T");
+		testEval("(null NIL)", "T");
+		testEval("(null (quote (1 2 3)))", "NIL");
+		testEval("(null (times 3 4))", "NIL");
 	}
 
 	@Test
 	public void testCar() {
-		testEvalPass("(car (cons 1 2))", "1");
-		testEvalPass("(car (quote (1 2)))", "1");
+		testEval("(car (cons 1 2))", "1");
+		testEval("(car (quote (1 2)))", "1");
 	}
 
 	@Test
 	public void testCdr() {
-		testEvalPass("(cdr (cons 1 2))", "2");
-		testEvalPass("(cdr (quote (1 2)))", "(2 . NIL)");
+		testEval("(cdr (cons 1 2))", "2");
+		testEval("(cdr (quote (1 2)))", "(2 . NIL)");
 	}
 
 	@Test
 	public void testCons() {
-		testEvalPass("(cons (cons 1 2) (cons 3 4))", "((1 . 2) . (3 . 4))");
+		testEval("(cons (cons 1 2) (cons 3 4))", "((1 . 2) . (3 . 4))");
 	}
 
 	@Test
 	public void testDefun() {
-		testEvalPass("(DEFUN DIFF (X Y) \n (COND ((EQ X Y) NIL) \n (T T)))",
-				"DIFF");
+		testEval("(DEFUN DIFF (X Y) \n (COND ((EQ X Y) NIL) \n (T T)))", "DIFF");
 	}
 
-	public static void testEvalPass(String input, String expectedOutput) {
+	@Test
+	public void testMultiEval() {
+		String[] inputs = { "1", "2", "(plus 1 2)" };
+		String[] outputs = { "1", "2", "3" };
+		testMultipleEval(inputs, outputs);
+	}
+
+	@Test
+	public void testFuncEval() {
+		String[] inputs = { "(defun inc (x) (plus x 1))", "(inc 9)", "(inc 99)" };
+		String[] outputs = { "INC", "10", "100" };
+		testMultipleEval(inputs, outputs);
+	}
+
+	@Test
+	public void testMultiDefun() {
+		String[] inputs = { "(defun inc (x) (plus x 1))",
+				"(defun dec (x) (minus x 1))", "(defun nop (x) (inc (dec x)))",
+				"(nop 10)", "(inc 5)", "(dec (dec (dec 10)))" };
+		String[] outputs = { "INC", "DEC", "NOP", "10", "6", "7" };
+		testMultipleEval(inputs, outputs);
+	}
+
+	public static void testEval(String input, String expectedOutput) {
 		try {
 			Parser p = getParser(input);
-			String actual = Evaluator.eval(p.parse(), SExpression.NIL,
-					SExpression.NIL).toString();
+			Environment env = new Environment();
+			String actual = Evaluator.eval(p.parse(), env).toString();
 			assertEquals(expectedOutput, actual);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
+		}
+	}
+
+	public static void testMultipleEval(String[] inputs, String[] outputs) {
+		assertTrue(inputs.length == outputs.length);
+
+		Environment env = new Environment();
+		for (int i = 0; i < inputs.length; i++) {
+			try {
+				Parser p = getParser(inputs[i]);
+				String actual = Evaluator.eval(p.parse(), env).toString();
+				assertEquals(outputs[i], actual);
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail();
+			}
 		}
 	}
 
