@@ -19,22 +19,27 @@ public class Validator {
 					|| reserved.contains(exp.get_val())) {
 				throw new Exception("Invalid function name declared");
 			}
+			break;
 		case "FAPPLY":
 			if (!isAtom(exp) || isNull(exp) || isInt(exp)) {
 				throw new Exception("Invalid function name called");
 			}
+			break;
 		case "EVCON":
 			if (isNull(exp)) {
 				throw new Exception("Invalid condition");
 			}
+			break;
 		case "GETVAL":
 			if (!isAtom(exp) || isNull(exp) || isInt(exp)) {
 				throw new Exception("getVal called with wrong input");
 			}
+			break;
 		case "ISBOUND":
 			if (!isAtom(exp) || isNull(exp) || isInt(exp)) {
 				throw new Exception("isBound called with wrong input");
 			}
+			break;
 		}
 	}
 }
