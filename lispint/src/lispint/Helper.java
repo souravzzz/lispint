@@ -10,6 +10,10 @@ public class Helper {
 		return exp.get_cdr();
 	}
 
+	public static SExpression cons(SExpression exp1, SExpression exp2) {
+		return new SExpression(exp1, exp2);
+	}
+
 	public static SExpression caar(SExpression exp) {
 		return car(car(exp));
 	}
@@ -101,8 +105,13 @@ public class Helper {
 		return null;
 	}
 
-	public static SExpression cons(SExpression exp1, SExpression exp2) {
-		return new SExpression(exp1, exp2);
+	public static int countElements(SExpression list) throws Exception {
+		if (list == null) {
+			throw new Exception("Count called on invalid list");
+		} else if (isNull(list)) {
+			return 0;
+		} else {
+			return countElements(cdr(list)) + 1;
+		}
 	}
-
 }

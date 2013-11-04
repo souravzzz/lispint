@@ -141,6 +141,24 @@ public class EvalTest {
 		testMultipleEval(inputs, outputs);
 	}
 
+	@Test
+	public void testRecursion() {
+		String[] inputs = {
+				"(defun fact (x) (cond ((eq x 0) 1) (t (times x (fact (minus x 1))))))",
+				"(fact 0)", "(fact 1)", "(fact 4)", "(fact 5)" };
+		String[] outputs = { "FACT", "1", "1", "24", "120" };
+		testMultipleEval(inputs, outputs);
+	}
+
+	@Test
+	public void testMultiParams() {
+		String[] inputs = {
+				"(DEFUN SUM4 (W X Y Z) (plus w (plus x (plus y z))))",
+				"(sum4 1 2 3 4)" };
+		String[] outputs = { "SUM4", "10" };
+		testMultipleEval(inputs, outputs);
+	}
+
 	public static void testEval(String input, String expectedOutput) {
 		try {
 			Parser p = getParser(input);

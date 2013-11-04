@@ -22,21 +22,20 @@ public class Evaluator {
 			}
 		} else {
 			if (isEqual(car(exp), "QUOTE")) {
-				return cadr(exp);
+				return evquote(exp);
 			} else if (isEqual(car(exp), "COND")) {
 				return evcon(cdr(exp), env);
 			} else if (isEqual(car(exp), "DEFUN")) {
-				SExpression fName = cadr(exp);
-				validate("FNAME", fName);
-				SExpression fParams = caddr(exp);
-				SExpression fBody = cadr(cddr(exp));
-				SExpression fEntry = cons(fName, cons(fParams, fBody));
-				env.d = cons(fEntry, env.d);
-				return fName;
+				return evdefun(exp, env);
 			} else {
 				return apply(car(exp), evlist(cdr(exp), env), env);
 			}
 		}
+	}
+
+	public static SExpression evquote(SExpression x) throws Exception {
+		validate("NPARAM", cdr(x), 1);
+		return cadr(x);
 	}
 
 	public static SExpression evcon(SExpression x, Environment env)
@@ -59,6 +58,19 @@ public class Evaluator {
 		} else {
 			return cons(eval(car(x), env), evlist(cdr(x), env));
 		}
+	}
+
+	public static SExpression evdefun(SExpression x, Environment env)
+			throws Exception {
+
+		SExpression fName = cadr(x);
+		validate("FNAME", fName);
+
+		SExpression fParams = caddr(x);
+		SExpression fBody = cadr(cddr(x));
+		SExpression fEntry = cons(fName, cons(fParams, fBody));
+		env.d = cons(fEntry, env.d);
+		return fName;
 	}
 
 	public static SExpression apply(SExpression f, SExpression x,
@@ -117,7 +129,11 @@ public class Evaluator {
 	}
 
 	public static SExpression addPairs(SExpression params, SExpression args,
-			SExpression a) {
+			SExpression a) throws Exception {
+
+		if (countElements(params) != countElements(args)) {
+			throw new Exception("Wrong number of arguments");
+		}
 
 		if (!isNull(params)) {
 			SExpression car = cons(car(params), car(args));

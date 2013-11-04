@@ -40,6 +40,15 @@ public class Validator {
 				throw new Exception("isBound called with wrong input");
 			}
 			break;
+		case "NPARAM":
+			throw new Exception("validate called improperly");
+		}
+	}
+
+	public static void validate(String rule, SExpression exp, int nParams)
+			throws Exception {
+		if (countElements(exp) != nParams) {
+			throw new Exception("Wrong number of arguments");
 		}
 	}
 }

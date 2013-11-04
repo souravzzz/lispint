@@ -145,4 +145,23 @@ public class HelperTest {
 		assertEquals("T", SExpression.T.toString());
 		assertEquals("NIL", SExpression.NIL.toString());
 	}
+
+	@Test
+	public void testCountElements() {
+		try {
+			SExpression l1 = cons(a, cons(b, cons(c, cons(d, SExpression.NIL))));
+			assertEquals(4, countElements(l1));
+			SExpression l2 = cons(a, SExpression.NIL);
+			assertEquals(1, countElements(l2));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+		try {
+			SExpression l3 = cons(a, b);
+			countElements(l3);
+			fail();
+		} catch (Exception e) {
+		}
+	}
 }
