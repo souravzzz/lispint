@@ -76,6 +76,15 @@ public class Helper {
 		return false;
 	}
 
+	public static boolean isList(SExpression exp) {
+		if (!isAtom(exp) && car(exp) != null && cdr(exp) != null) {
+			if (isList(cdr(exp)) || isEqual(cdr(exp), SExpression.NIL)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static String toDot(SExpression exp) {
 		if (isAtom(exp)) {
 			return exp.get_val();
@@ -95,23 +104,41 @@ public class Helper {
 		}
 	}
 
-	public static String toList(SExpression exp) {
+	public static String toString(SExpression exp) {
+		String str = "(";
 		if (isAtom(exp)) {
 			return exp.get_val();
+		} else if (isList(exp)) {
+			SExpression e = exp;
+			while (true) {
+				str += toString(car(e));
+				if (!isEqual(cdr(e), SExpression.NIL)) {
+					str += " ";
+					e = cdr(e);
+				} else {
+					break;
+				}
+			}
 		} else {
-			// TODO implement toList properly
+			if (car(exp) != null) {
+				str += toString(car(exp));
+			}
+			str += " . ";
+			if (cdr(exp) != null) {
+				str += toString(cdr(exp));
+			}
 		}
-
-		return null;
+		str += ")";
+		return str;
 	}
 
-	public static int countElements(SExpression list) throws Exception {
-		if (list == null) {
-			throw new Exception("Count called on invalid list");
-		} else if (isNull(list)) {
+	public static int countElements(SExpression exp) throws Exception {
+		if (exp == null) {
+			throw new Exception("Count called on null list");
+		} else if (isNull(exp)) {
 			return 0;
 		} else {
-			return countElements(cdr(list)) + 1;
+			return countElements(cdr(exp)) + 1;
 		}
 	}
 }

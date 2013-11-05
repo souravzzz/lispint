@@ -17,9 +17,9 @@ public class EvalTest {
 
 	@Test
 	public void testQuote() {
-		testEval("(quote (1 2))", "(1 . (2 . NIL))");
+		testEval("(quote (1 2 3))", "(1 2 3)");
 		testEval("(quote (1 . 2))", "(1 . 2)");
-		testEval("(quote (T NIL))", "(T . (NIL . NIL))");
+		testEval("(quote (T NIL 1 2 NIL T))", "(T NIL 1 2 NIL T)");
 	}
 
 	@Test
@@ -91,18 +91,19 @@ public class EvalTest {
 	@Test
 	public void testCar() {
 		testEval("(car (cons 1 2))", "1");
-		testEval("(car (quote (1 2)))", "1");
+		testEval("(car (quote (1 2 3)))", "1");
 	}
 
 	@Test
 	public void testCdr() {
 		testEval("(cdr (cons 1 2))", "2");
-		testEval("(cdr (quote (1 2)))", "(2 . NIL)");
+		testEval("(cdr (quote (1 2 3)))", "(2 3)");
 	}
 
 	@Test
 	public void testCons() {
 		testEval("(cons (cons 1 2) (cons 3 4))", "((1 . 2) . (3 . 4))");
+		testEval("(cons 1 (cons 2 nil))", "(1 2)");
 	}
 
 	@Test

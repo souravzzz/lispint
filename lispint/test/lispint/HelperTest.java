@@ -24,6 +24,12 @@ public class HelperTest {
 	final SExpression x = new SExpression("a");
 	final SExpression t = new SExpression("T");
 
+	final SExpression l1 = cons(a, cons(b, cons(c, cons(d, SExpression.NIL))));
+	final SExpression l2 = cons(a, SExpression.NIL);
+	final SExpression l3 = cons(l1, cons(l2, SExpression.NIL));
+	final SExpression l4 = cons(p, cons(q, SExpression.NIL));
+	final SExpression l5 = cons(l2, l2);
+
 	@Test
 	public void testCar() {
 		assertTrue(car(p).equals(a));
@@ -147,21 +153,60 @@ public class HelperTest {
 	}
 
 	@Test
+	public void testToString() {
+		assertEquals("A", a.toString());
+		assertEquals("B", b.toString());
+		assertEquals("2", i.toString());
+
+		assertEquals("(A . B)", p.toString());
+		assertEquals("((A . B) . (C . D))", r.toString());
+		assertEquals("(2 . 3)", m.toString());
+
+		assertEquals("T", SExpression.T.toString());
+		assertEquals("NIL", SExpression.NIL.toString());
+
+		assertEquals("(A B C D)", l1.toString());
+		assertEquals("(A)", l2.toString());
+		assertEquals("((A B C D) (A))", l3.toString());
+		assertEquals("((A . B) (C . D))", l4.toString());
+		assertEquals("((A) A)", l5.toString());
+	}
+
+	@Test
 	public void testCountElements() {
 		try {
-			SExpression l1 = cons(a, cons(b, cons(c, cons(d, SExpression.NIL))));
 			assertEquals(4, countElements(l1));
-			SExpression l2 = cons(a, SExpression.NIL);
 			assertEquals(1, countElements(l2));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
+	}
+
+	@Test
+	public void testCountElementsNonList() {
 		try {
-			SExpression l3 = cons(a, b);
-			countElements(l3);
+			countElements(p);
 			fail();
 		} catch (Exception e) {
 		}
+		try {
+			countElements(a);
+			fail();
+		} catch (Exception e) {
+		}
+	}
+
+	@Test
+	public void testIsList() {
+		assertTrue(isList(l1));
+		assertTrue(isList(l2));
+		assertTrue(isList(l3));
+
+		assertFalse(isList(a));
+		assertFalse(isList(p));
+		assertFalse(isList(r));
+		assertFalse(isList(t));
+		assertFalse(isList(SExpression.NIL));
 	}
 }

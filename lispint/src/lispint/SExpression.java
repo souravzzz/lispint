@@ -39,6 +39,6 @@ public class SExpression {
 	}
 
 	public String toString() {
-		return Helper.toDot(this);
+		return Helper.toString(this);
 	}
 }
