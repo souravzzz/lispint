@@ -2,10 +2,10 @@ package lispint;
 
 public class SExpression {
 
-	SExpression _car;
-	SExpression _cdr;
+	private SExpression _car;
+	private SExpression _cdr;
 
-	String _val;
+	private String _val;
 
 	public static final SExpression T = new SExpression("T");
 	public static final SExpression NIL = new SExpression("NIL");

@@ -8,7 +8,7 @@ import java.io.StreamTokenizer;
 
 public class Lexer {
 
-	StreamTokenizer _tokenizer;
+	private StreamTokenizer _tokenizer;
 
 	public Lexer(InputStream in) {
 		_tokenizer = new StreamTokenizer(new BufferedReader(

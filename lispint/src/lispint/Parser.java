@@ -2,7 +2,7 @@ package lispint;
 
 public class Parser {
 
-	Lexer _lexer;
+	private Lexer _lexer;
 
 	public Parser(Lexer lexer) {
 		_lexer = lexer;
@@ -17,7 +17,7 @@ public class Parser {
 				case LEFTPAREN:
 					return parseRest();
 				case RIGHTPAREN:
-					System.out.println("Extra Closing Parens Found");
+					System.out.println("Ignoring Extra Closing Parens");
 					return parse();
 				case ATOM:
 					return new SExpression(token._val);
@@ -39,9 +39,6 @@ public class Parser {
 			case DOT:
 				SExpression exp = parse();
 				token = _lexer.getNextToken();
-				if (!token.equals(Token.RIGHTPAREN)) {
-					System.out.println("Warning");
-				}
 				return exp;
 			default:
 				_lexer.unreadLastToken();

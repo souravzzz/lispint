@@ -29,6 +29,8 @@ public class HelperTest {
 	final SExpression l3 = cons(l1, cons(l2, SExpression.NIL));
 	final SExpression l4 = cons(p, cons(q, SExpression.NIL));
 	final SExpression l5 = cons(l2, l2);
+	final SExpression l6 = cons(SExpression.NIL,
+			cons(SExpression.NIL, SExpression.NIL));
 
 	@Test
 	public void testCar() {
@@ -170,6 +172,7 @@ public class HelperTest {
 		assertEquals("((A B C D) (A))", l3.toString());
 		assertEquals("((A . B) (C . D))", l4.toString());
 		assertEquals("((A) A)", l5.toString());
+		assertEquals("(NIL NIL)", l6.toString());
 	}
 
 	@Test
@@ -202,6 +205,7 @@ public class HelperTest {
 		assertTrue(isList(l1));
 		assertTrue(isList(l2));
 		assertTrue(isList(l3));
+		assertTrue(isList(l6));
 
 		assertFalse(isList(a));
 		assertFalse(isList(p));
