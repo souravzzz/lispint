@@ -48,12 +48,15 @@ public class Helper {
 	}
 
 	public static boolean isInt(SExpression exp) {
-		if (!isAtom(exp)) {
-			return false;
+		if (isAtom(exp)) {
+			return exp.get_isInt();
 		}
+		return false;
+	}
 
+	public static boolean isInt(String str) {
 		try {
-			Integer.parseInt(exp.get_val());
+			Integer.parseInt(str);
 			return true;
 		} catch (NumberFormatException ne) {
 			return false;

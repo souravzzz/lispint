@@ -15,7 +15,7 @@ public class Parser {
 			if (token != null) {
 				switch (token) {
 				case LEFTPAREN:
-					return parseRest();
+					return parseRest(false);
 				case RIGHTPAREN:
 					System.out.println("Ignoring Extra Closing Parens");
 					return parse();
@@ -30,19 +30,22 @@ public class Parser {
 		return null;
 	}
 
-	public SExpression parseRest() throws Exception {
+	public SExpression parseRest(boolean isDotOk) throws Exception {
 		if (_lexer.hasMoreTokens()) {
 			Token token = _lexer.getNextToken();
 			switch (token) {
 			case RIGHTPAREN:
 				return SExpression.NIL;
 			case DOT:
+				if (!isDotOk) {
+					throw new Exception("Invalid input");
+				}
 				SExpression exp = parse();
 				token = _lexer.getNextToken();
 				return exp;
 			default:
 				_lexer.unreadLastToken();
-				return new SExpression(parse(), parseRest());
+				return new SExpression(parse(), parseRest(true));
 			}
 		} else {
 			throw new Exception("Unexpected EOF");
