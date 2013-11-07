@@ -17,17 +17,17 @@ public class Validator {
 		case "FNAME":
 			if (!isAtom(exp) || isNull(exp) || isInt(exp)
 					|| reserved.contains(exp.get_val())) {
-				throw new Exception("Invalid function name declared");
+				throw new Exception("Declared invalid function name " + exp);
 			}
 			break;
 		case "FAPPLY":
 			if (!isAtom(exp) || isNull(exp) || isInt(exp)) {
-				throw new Exception("Invalid function name called");
+				throw new Exception("Called invalid function " + exp);
 			}
 			break;
 		case "EVCON":
 			if (isNull(exp)) {
-				throw new Exception("Invalid condition");
+				throw new Exception("Declared invalid condition");
 			}
 			break;
 		case "GETVAL":
@@ -48,7 +48,7 @@ public class Validator {
 	public static void validate(String rule, SExpression exp, int nParams)
 			throws Exception {
 		if (countElements(exp) != nParams) {
-			throw new Exception("Wrong number of arguments");
+			throw new Exception("Wrong number of arguments passed to function");
 		}
 	}
 }

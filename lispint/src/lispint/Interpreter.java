@@ -13,8 +13,11 @@ public class Interpreter {
 				SExpression output = Evaluator.eval(input, env);
 				System.out.println(output);
 			} catch (Exception e) {
-				System.out.println("ERROR!");
-				e.printStackTrace();
+				String detail = e.getMessage();
+				if (detail == null) {
+					detail = "Invalid input";
+				}
+				System.out.println("ERROR " + detail);
 			}
 		}
 

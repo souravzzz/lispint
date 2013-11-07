@@ -18,7 +18,7 @@ public class Evaluator {
 			} else if (isBound(exp, env.a)) {
 				return getVal(exp, env.a);
 			} else {
-				throw new Exception("Undefined Variable");
+				throw new Exception("Used undefined variable " + exp);
 			}
 		} else {
 			if (isEqual(car(exp), "QUOTE")) {
@@ -121,6 +121,9 @@ public class Evaluator {
 			return Builtins.REMAINDER(x);
 
 		} else {
+			if (!isBound(f, env.d)) {
+				throw new Exception("Called undefined function " + f);
+			}
 			Environment e = new Environment();
 			e.a = addPairs(car(getVal(f, env.d)), x, env.a);
 			e.d = env.d;
@@ -131,9 +134,7 @@ public class Evaluator {
 	public static SExpression addPairs(SExpression params, SExpression args,
 			SExpression a) throws Exception {
 
-		if (countElements(params) != countElements(args)) {
-			throw new Exception("Wrong number of arguments");
-		}
+		validate("NPARAMS", params, countElements(args));
 
 		if (!isNull(params)) {
 			SExpression car = cons(car(params), car(args));
