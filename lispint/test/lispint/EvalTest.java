@@ -20,6 +20,7 @@ public class EvalTest {
 		testEval("(quote (1 2 3))", "(1 2 3)");
 		testEval("(quote (1 . 2))", "(1 . 2)");
 		testEval("(quote (T NIL 1 2 NIL T))", "(T NIL 1 2 NIL T)");
+		testEval("(quote (()()))", "(NIL NIL)");
 	}
 
 	@Test
@@ -52,6 +53,7 @@ public class EvalTest {
 	public void testEQ() {
 		testEval("(EQ 1 1)", "T");
 		testEval("(EQ 1 2)", "NIL");
+		testEval("(eq 4 (plus 2 2))", "T");
 	}
 
 	@Test
@@ -84,6 +86,8 @@ public class EvalTest {
 	public void testNull() {
 		testEval("(null ())", "T");
 		testEval("(null NIL)", "T");
+		testEval("(null (quote ()))", "T");
+		testEval("(null (quote (()())))", "NIL");
 		testEval("(null (quote (1 2 3)))", "NIL");
 		testEval("(null (times 3 4))", "NIL");
 	}
