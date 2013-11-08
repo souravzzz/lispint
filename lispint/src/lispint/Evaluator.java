@@ -43,6 +43,7 @@ public class Evaluator {
 
 		validate("EVCON", x);
 
+		validate("NPARAMS", car(x), 2);
 		if (eval(caar(x), env) != SExpression.NIL) {
 			return eval(cadar(x), env);
 		} else {
@@ -67,6 +68,8 @@ public class Evaluator {
 		validate("FNAME", fName);
 
 		SExpression fParams = caddr(x);
+		validate("FPARAMS", fParams);
+
 		SExpression fBody = cadr(cddr(x));
 		SExpression fEntry = cons(fName, cons(fParams, fBody));
 		env.d = cons(fEntry, env.d);

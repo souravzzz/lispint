@@ -2,6 +2,7 @@ package lispint;
 
 import static lispint.Helper.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +26,25 @@ public class Validator {
 				throw new Exception("Called invalid function " + exp);
 			}
 			break;
+		case "FPARAMS":
+			if (!isEqual(exp, SExpression.NIL)) {
+				List<String> pNames = new ArrayList<String>();
+				while (!isEqual(exp, SExpression.NIL)) {
+					SExpression paramName = car(exp);
+					if (!isAtom(paramName) || isNull(paramName)
+							|| isInt(paramName)
+							|| reserved.contains(paramName.get_val())) {
+						throw new Exception("Declared invalid parameter name "
+								+ paramName);
+					} else if (pNames.contains(paramName.get_val())) {
+						throw new Exception("Declared duplicate parameter "
+								+ paramName.get_val());
+					}
+					pNames.add(paramName.get_val());
+					exp = cdr(exp);
+				}
+			}
+			break;
 		case "EVCON":
 			if (isNull(exp)) {
 				throw new Exception("Declared invalid condition");
@@ -38,6 +58,21 @@ public class Validator {
 		case "ISBOUND":
 			if (!isAtom(exp) || isNull(exp) || isInt(exp)) {
 				throw new Exception("isBound called with wrong input");
+			}
+			break;
+		case "CAR":
+			if (exp == null || car(exp) == null || caar(exp) == null) {
+				throw new Exception("CAR called with wrong input");
+			}
+			break;
+		case "CDR":
+			if (exp == null || car(exp) == null || cdar(exp) == null) {
+				throw new Exception("CDR called with wrong input");
+			}
+			break;
+		case "EQ":
+			if (!isAtom(car(exp)) || !isAtom(cadr(exp))) {
+				throw new Exception("EQ called with wrong input");
 			}
 			break;
 		case "NPARAM":

@@ -6,10 +6,12 @@ import static lispint.Validator.*;
 public class Builtins {
 
 	public static SExpression CAR(SExpression exp) throws Exception {
+		validate("CAR", exp);
 		return caar(exp);
 	}
 
 	public static SExpression CDR(SExpression exp) throws Exception {
+		validate("CDR", exp);
 		return cdar(exp);
 	}
 
@@ -39,6 +41,7 @@ public class Builtins {
 
 	public static SExpression EQ(SExpression exp) throws Exception {
 		validate("NPARAM", exp, 2);
+		validate("EQ", exp);
 		return isEqual(car(exp), cadr(exp)) ? SExpression.T : SExpression.NIL;
 	}
 

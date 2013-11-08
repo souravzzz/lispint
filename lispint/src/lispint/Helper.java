@@ -137,7 +137,7 @@ public class Helper {
 
 	public static int countElements(SExpression exp) throws Exception {
 		if (exp == null) {
-			throw new Exception("Count called on null list");
+			throw new Exception("Wrong number of arguments passed to function");
 		} else if (isNull(exp)) {
 			return 0;
 		} else {
