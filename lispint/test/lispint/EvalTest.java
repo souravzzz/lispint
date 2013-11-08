@@ -111,6 +111,13 @@ public class EvalTest {
 	}
 
 	@Test
+	public void testCond() {
+		testEval("(cond (t t))", "T");
+		testEval("(cond ((eq 1 2) t) (t nil))", "NIL");
+		testEval("(cond ((less 1 0) 1) ((eq 1 0) 2) ((greater 1 0) 3))", "3");
+	}
+
+	@Test
 	public void testDefun() {
 		testEval("(DEFUN DIFF (X Y) \n (COND ((EQ X Y) NIL) \n (T T)))", "DIFF");
 	}
@@ -152,6 +159,23 @@ public class EvalTest {
 				"(defun fact (x) (cond ((eq x 0) 1) (t (times x (fact (minus x 1))))))",
 				"(fact 0)", "(fact 1)", "(fact 4)", "(fact 5)" };
 		String[] outputs = { "FACT", "1", "1", "24", "120" };
+		testMultipleEval(inputs, outputs);
+	}
+
+	@Test
+	public void testRecursion2() {
+		String[] inputs = {
+				"(defun fib (n) (cond ((eq n 0) n) ((eq n 1) n) (t (plus (fib (minus n 1)) (fib (minus n 2))))))",
+				"(fib 1)", "(fib 2)", "(fib 3)", "(fib 4)", "(fib 5)" };
+		String[] outputs = { "FIB", "1", "1", "2", "3", "5" };
+		testMultipleEval(inputs, outputs);
+	}
+
+	@Test
+	public void testSpecialParamName() {
+		String[] inputs = { "(defun f (plus minus) (plus plus minus))",
+				"(f 1 2)" };
+		String[] outputs = { "F", "3" };
 		testMultipleEval(inputs, outputs);
 	}
 

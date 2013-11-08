@@ -10,6 +10,7 @@ public class InvalidTests {
 	@Test
 	public void testInvalidSimple() {
 		testEvalFail("((A B) C)");
+		testEvalFail("(quote (1) (2))");
 		testEvalFail("(plus (plus a 6) (plus 5 6))");
 		testEvalFail("(null (()))");
 		testEvalFail("(atom 123xyz)");
@@ -37,7 +38,6 @@ public class InvalidTests {
 		testEvalFail("(defun f6 (x t) (plus x t))");
 		testEvalFail("(defun (x y) (plus x y))");
 		testEvalFail("(defun cond (x) (plus x y))");
-		testEvalFail("");
 	}
 
 	@Test

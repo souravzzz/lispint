@@ -8,16 +8,18 @@ import java.util.List;
 
 public class Validator {
 
-	private final static List<String> reserved = Arrays.asList("T", "NIL",
+	private final static List<String> reservedFname = Arrays.asList("T", "NIL",
 			"QUOTE", "COND", "DEFUN", "CAR", "CDR", "CONS", "ATOM", "NULL",
 			"INT", "EQ", "LESS", "GREATER", "PLUS", "MINUS", "TIMES",
 			"QUOTIENT", "REMAINDER");
+
+	private final static List<String> reservedPname = Arrays.asList("T", "NIL");
 
 	public static void validate(String rule, SExpression exp) throws Exception {
 		switch (rule) {
 		case "FNAME":
 			if (!isAtom(exp) || isNull(exp) || isInt(exp)
-					|| reserved.contains(exp.get_val())) {
+					|| reservedFname.contains(exp.get_val())) {
 				throw new Exception("Declared invalid function name " + exp);
 			}
 			break;
@@ -33,7 +35,7 @@ public class Validator {
 					SExpression paramName = car(exp);
 					if (!isAtom(paramName) || isNull(paramName)
 							|| isInt(paramName)
-							|| reserved.contains(paramName.get_val())) {
+							|| reservedPname.contains(paramName.get_val())) {
 						throw new Exception("Declared invalid parameter name "
 								+ paramName);
 					} else if (pNames.contains(paramName.get_val())) {
