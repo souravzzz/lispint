@@ -73,6 +73,7 @@ public class EvalTest {
 		testEval("(INT 0)", "T");
 		testEval("(INT 999)", "T");
 		testEval("(INT -333)", "T");
+		testEval("(INT (quote 1))", "T");
 	}
 
 	@Test
