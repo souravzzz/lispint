@@ -71,6 +71,8 @@ public class Evaluator {
 		validate("FPARAMS", fParams);
 
 		SExpression fBody = cadr(cddr(x));
+		validate("FBODY", fBody);
+
 		SExpression fEntry = cons(fName, cons(fParams, fBody));
 		env.d = cons(fEntry, env.d);
 		return fName;

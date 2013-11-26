@@ -47,6 +47,11 @@ public class Validator {
 				}
 			}
 			break;
+		case "FBODY":
+			if (exp == null) {
+				throw new Exception("Declared invalid function body");
+			}
+			break;
 		case "EVCON":
 			if (isNull(exp)) {
 				throw new Exception("Declared invalid condition");

@@ -36,6 +36,7 @@ public class InvalidTests {
 		testEvalFail("(defun f4 (1 2) (plus 1 2))");
 		testEvalFail("(defun f5 (x y x) (plus x y))");
 		testEvalFail("(defun f6 (x t) (plus x t))");
+		testEvalFail("(defun f7 (x) )");
 		testEvalFail("(defun (x y) (plus x y))");
 		testEvalFail("(defun cond (x) (plus x y))");
 	}
