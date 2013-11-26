@@ -14,7 +14,7 @@ public class Evaluator {
 			} else if (isEqual(exp, "NIL")) {
 				return SExpression.NIL;
 			} else if (isInt(exp)) {
-				return exp;
+				return intExp(exp);
 			} else if (isBound(exp, env.a)) {
 				return getVal(exp, env.a);
 			} else {
@@ -173,6 +173,10 @@ public class Evaluator {
 		} else {
 			return getVal(exp, cdr(a));
 		}
+	}
+
+	public static SExpression intExp(SExpression exp) {
+		return new SExpression(Integer.valueOf(exp.get_val()).toString());
 	}
 
 }

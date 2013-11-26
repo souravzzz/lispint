@@ -54,6 +54,7 @@ public class EvalTest {
 		testEval("(EQ 1 1)", "T");
 		testEval("(EQ 1 2)", "NIL");
 		testEval("(eq 4 (plus 2 2))", "T");
+		testEval("(eq +4 4)", "T");
 	}
 
 	@Test
@@ -109,6 +110,7 @@ public class EvalTest {
 	public void testCons() {
 		testEval("(cons (cons 1 2) (cons 3 4))", "((1 . 2) . (3 . 4))");
 		testEval("(cons 1 (cons 2 nil))", "(1 2)");
+		testEval("(cons +1 -2)", "(1 . -2)");
 	}
 
 	@Test
